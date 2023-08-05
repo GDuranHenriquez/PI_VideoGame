@@ -93,6 +93,30 @@ async function getVideogames(req, res){
   }
 };
 
+async function getVideogameSearch(req, res){
+  try{
+
+  }catch(error){
+
+  };
+};
+
+async function getVideogamesGenres(){
+  try {
+  
+  }catch (error) {
+  
+  }
+};
+
+/* async function getNextVideogame(req, res){
+  try {
+    
+  } catch (error) {
+    
+  }
+}; */
+
 /* async function getVideogamesID(req, res){
   try {
     var modelVideogame = await Videogame.findAll({ where:{id: req.query.id },
