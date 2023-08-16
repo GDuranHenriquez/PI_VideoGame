@@ -1,4 +1,4 @@
-import { SEARCH_ALL_VIDEOGAME, SEARCH_ID_VIDEOGAME, SEARCH_NAME_VIDEOGAME, SLICE_VIDEOGAME, PLATFORMS, CLEAN_DETAIL, ROUTER_PAGE, GENRES } from './types.js';
+import { SEARCH_ALL_VIDEOGAME, SEARCH_ID_VIDEOGAME, SEARCH_NAME_VIDEOGAME, SLICE_VIDEOGAME, PLATFORMS, CLEAN_DETAIL, ROUTER_PAGE, GENRES, POST_GAME } from './types.js';
 import axios from 'axios';
 
 const ENDPOINT_VIDEOGAME  = process.env.REACT_APP_ENDPOINT_VIDEOGAME;
@@ -70,5 +70,17 @@ export const setRouter = (router) =>{
     type: ROUTER_PAGE,
     payload: router
   }
+};
+
+export const postNewGame = (data) =>{
+  const endPoint = ENDPOINT_VIDEOGAME + `/videogames`;
+  return (dispatch) => {
+    axios.post(endPoint, data).then(({data}) => {
+      return dispatch({
+        type: POST_GAME,
+        payload: data
+      })
+    });
+  };
 };
 

@@ -69,9 +69,9 @@ function NavBarHome({paht}){
           <input type="button" id="addGame" name="addGame" value="Add new game" />
         </Link>
 
-        <div className="imgLogout">
+        <Link to='/' className="imgLogout">
           <img src={logout} alt="" />
-        </div>
+        </Link >
       </div>
 
     </div>    

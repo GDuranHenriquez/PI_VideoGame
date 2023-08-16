@@ -1,4 +1,4 @@
-import { SEARCH_ALL_VIDEOGAME, SEARCH_ID_VIDEOGAME, SEARCH_NAME_VIDEOGAME, SLICE_VIDEOGAME, PLATFORMS, CLEAN_DETAIL, ROUTER_PAGE, GENRES } from '../actions/types.js';
+import { SEARCH_ALL_VIDEOGAME, SEARCH_ID_VIDEOGAME, SEARCH_NAME_VIDEOGAME, SLICE_VIDEOGAME, PLATFORMS, CLEAN_DETAIL, ROUTER_PAGE, GENRES, POST_GAME } from '../actions/types.js';
 
 const initialGlobalState = {
   allVideogames: [],
@@ -35,6 +35,8 @@ export default function rootReducer(state = initialGlobalState, action){
       return { ...state, routerPage: action.payload }
     case GENRES:
       return { ...state, genres: action.payload }
+    case POST_GAME:
+      return { ...state, allVideogames: [action.payload, ...state.allVideogames]}
     default:
       return {...state};
   }

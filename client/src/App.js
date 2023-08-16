@@ -9,6 +9,7 @@ import { allVideogames, getPlatForms, setRouter, cleanDetail, getGenres } from "
 import Home from './pages/home';
 import DetailGame from './pages/detailGame'
 import NewGame from './pages/newGame';
+import Launch from './pages/launch';
 
 function App() {
   const location = useLocation();
@@ -26,6 +27,7 @@ function App() {
     <div className="App">
       {(location.pathname !== '/') ? (<NavBarHome paht={location.pathname}></NavBarHome>):null}
       <Routes>
+        <Route path='/' element= {<Launch></Launch>}></Route>
         <Route path='/home' element= {<Home></Home>}></Route>
         <Route path='/detailgame/:id' element = {<DetailGame></DetailGame>}></Route>
         <Route path='/addgame' element={<NewGame></NewGame>}></Route>

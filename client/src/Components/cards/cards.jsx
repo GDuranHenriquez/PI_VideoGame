@@ -37,9 +37,10 @@ function CardsVideogame(){
 
   return <Cards>
     <div className="containerCards">
-      { currentPage.map((videoGame) => (
+      { currentPage.map((videoGame, index) => (        
         <CardVideogame
-          key = {videoGame.id}
+          
+          key = {index}
           id = {videoGame.id}
           name = {videoGame.name}
           image = {videoGame.image}
@@ -47,7 +48,7 @@ function CardsVideogame(){
           platforms = {videoGame.platforms}
           released = {videoGame.released}
           rating = {videoGame.rating}
-          parent_platforms={videoGame.parent_platforms}  
+          parent_platforms={videoGame.parent_platforms? videoGame.parent_platforms:videoGame.platforms}  
         />
       )) }
     </div>

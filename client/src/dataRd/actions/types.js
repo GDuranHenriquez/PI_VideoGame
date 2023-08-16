@@ -6,3 +6,4 @@ export const PLATFORMS = 'PLATFORMS';
 export const CLEAN_DETAIL = 'CLEAN_DETAIL';
 export const ROUTER_PAGE = 'ROUTER_PAGE';
 export const GENRES = 'GENRES';
+export const POST_GAME = 'POST_GAME';

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 
-import { getPlatForms } from "../../dataRd/actions/index.js";
+import { getPlatForms, postNewGame } from "../../dataRd/actions/index.js";
 
 
 function FormGame(){
@@ -38,11 +38,32 @@ function FormGame(){
    
 
   useEffect(()=>{
-    console.log(dataState);
-  },[dataState]);
+    
+  },[]);
 
   function handleSubmit(event){
     event.preventDefault();
+    const genreArray = [];
+    const platfArray = [];
+    for(var i = 0; i < checkGenState.length; i++ ){
+      if(checkGenState[i]){
+        genreArray.push(i+1)
+      }
+    }
+    for(var j = 0; j < checkplatState.length; j++ ){
+      if(checkplatState[j]){
+        platfArray.push(j+1)
+      }
+    }
+    var ranking = dataState.rating === ''? 0 : dataState.rating;
+    const data = {...dataState, 
+      genres:genreArray, 
+      platforms:platfArray, 
+      rating: ranking,
+      description: `<p>${dataState.description}</p>`,
+      launchDate: dataState.released
+    }
+    dispatch(postNewGame(data));
   };
 
   const handleString = (e) => {
@@ -58,7 +79,7 @@ function FormGame(){
       if(e.target.value === ''){
         setDataState({...dataState, [e.target.name]:e.target.value});
       }else if(e.target.value <= 5 && e.target.value >= 0){
-        setDataState({...dataState, [e.target.name]:e.target.value});
+        setDataState({...dataState, [e.target.name]:Number.parseFloat(e.target.value)});
       }
     }
   }
@@ -79,9 +100,6 @@ function FormGame(){
     setCheckPlatfState(updateChckStateplatf);
   }
 
-  const handleSubmit = (e) => {
-
-  }
 
   return <DivFormGame>
     <form onSubmit={handleSubmit} className="formNewGame">

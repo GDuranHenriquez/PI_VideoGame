@@ -15,8 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 //import actions
 import { getVideoGameId } from '../../dataRd/actions/index.js'
 
-function CardVideogame({id, name, image, genres, platforms, released, rating, parent_platforms}){
-  
+function CardVideogame({id, name, image, genres, platforms, released, rating, parent_platforms}){  
 
   return <Card to={`/detailgame/${id}`}>
     <div className="image">
@@ -58,17 +57,18 @@ const platformsValue = (platf) =>{
     }             
   } */
   return <>    
-    {platf.map((plaform) =>(
-      <p key={plaform.platform.id}>{plaform.platform.name}</p>      
+    {platf.map((plaform) =>(      
+      <p key={plaform.platform? plaform.platform.id:plaform.id }>{plaform.platform? plaform.platform.name:plaform.name}</p>      
     ))
     }
   </>  
 }
 
 const platformsIcon = (parent_platf) => {
+
   return <>
     {parent_platf.map((parent) => (
-      <img key={parent.platform.id} src= {icons[parent.platform.name]} alt={`icon of ${parent.platform.name}`} ></img>
+      <img key={parent.platform?parent.platform.id:parent.id} src= {icons[parent.platform?parent.platform.name:parent.name ]} alt={`icon of ${parent.platform?parent.platform.name:parent.name}`} ></img>
     ))}
   </>
 };
@@ -127,6 +127,7 @@ const Card = styled(Link)`
   background-color: rgba(0, 0, 0, 0.76);
   box-shadow: 2px 3px 3px rgba(8, 198, 241, 0.5);
   cursor: pointer;
+  text-decoration: none;
   .image{
     width: 100%;
     height: 250px;
