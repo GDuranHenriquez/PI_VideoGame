@@ -6,7 +6,7 @@ const { API_KEY_RAW } = process.env;
 
 async function inicializatePlatforms(){
   try {
-    var { data } = await axios(`https://api.rawg.io/api/platforms?key=${API_KEY_RAW}`);
+    var { data } = await axios(`https://api.rawg.io/api/platforms/lists/parents?key=${API_KEY_RAW}`);
     data = data.results;
     data.forEach(async platforms => {
       await Platform.create({name: platforms.name})

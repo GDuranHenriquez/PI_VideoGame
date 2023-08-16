@@ -39,14 +39,20 @@ function FiltersNavBar(){
 };
 
 const DivContentFiltesr = styled.div`
+  top: 0;
+  left: 0;
+  right: 0;
   transition: height 2s;
   padding: 20px 0px 10px 0px;
   width: 300px;
   height: 370px;
-  background-color: rgba(255,255,255, 0.6);
-  margin-top: 0;
+  background-color: rgba(255,255,255, 0.7);
+  margin-top: 80px;
   margin-left: 20px;
-  border-radius: 0 0 10px 10px;  
+  border-radius: 0 0 10px 10px;
+  //margin-top: 200px;
+  position: fixed;
+  z-index: 2;
   .containerFilter{
     h3{
       margin-top: 0px;

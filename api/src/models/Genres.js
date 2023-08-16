@@ -15,7 +15,7 @@ module.exports = (sequelise) => {
     }
   },   
   {
-    timestamps: true,
+    timestamps: false,
     createdAt: false,
     updatedAt: false,
   })

@@ -1,15 +1,18 @@
 import React, { useEffect } from "react";
-import BackgroundHome from "../Components/home/backgroundHome";
-import NavBarHome from "../Components/home/navBar";
-import { useDispatch } from "react-redux";
-import { allVideogames, getPlatForms, setRouter, cleanDetail } from "../dataRd/actions";
-import CardsVideogame from "../Components/cards/cards";
+import styled from "styled-components";
 import { useLocation } from 'react-router-dom';
+import { useDispatch } from "react-redux";
 
-function Home(){
+import { allVideogames, getPlatForms, setRouter, cleanDetail } from "../dataRd/actions";
+
+import BackgroundHome from "../Components/home/backgroundHome";
+import FormGame from '../Components/formGame/formGame'
+
+function NewGame(){
+
   const location = useLocation();
   const dispatch = useDispatch();
-  
+
   useEffect(()=>{
     /* dispatch(allVideogames());
     dispatch(getPlatForms()); */
@@ -17,10 +20,14 @@ function Home(){
     dispatch(cleanDetail())
   },[]);
 
-  return <div className="home">
-    <BackgroundHome></BackgroundHome>    
-    <CardsVideogame></CardsVideogame>
-  </div>
+  return <DivNewGame>
+    <BackgroundHome></BackgroundHome>
+    <FormGame></FormGame>
+  </DivNewGame>
 };
 
-export default Home;
+const DivNewGame = styled.div`
+  
+`
+
+export default NewGame;

@@ -3,9 +3,13 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const routes = require('./routes/index.js');
+const cors = require('cors');
 
 //All Routes.
 const videogameRoutes = require('./routes/videoGamesRouter.js');
+const videogameNameRouter = require('./routes/videogameNameRouter.js')
+const platformsRouter = require('./routes/platformsRouter.js');
+const genresRouter = require('./routes/genresRoutes.js')
 
 require('./db.js');
 
@@ -24,8 +28,12 @@ server.use((req, res, next) => {
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
   next();
 });
+server.use(cors());
 
 //server.use('/', routes);
+server.use("/videogames/name", videogameNameRouter);
+server.use('/videogames/platforms', platformsRouter);
+server.use('/videogames/genres',genresRouter);
 server.use('/videogames', videogameRoutes);
 
 // Error catching endware.

@@ -1,14 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import styled from 'styled-components';
 import logout from '../../assets/icons/logout48x48.png';
 import search from '../../assets/icons/search48x48.png';
 import iconFilter from '../../assets/icons/flecha48x48.png';
 import FiltersNavBar from './navBarFilters';
+import { useLocation, Link } from 'react-router-dom';
+import detailToHome from '../../assets/icons/gif/flechaIzquierda.gif'
+import agregar from '../../assets/icons/agregar.png'
 
-function NavBarHome(){
+function NavBarHome({paht}){
+  const location = useLocation();
+  const routerPage = useSelector((state) => state.routerPage);
+
+  //const [routerPage, setRouterPage] = useState(paht);
   const [inpSearcFocus, setInpSearcFocus] = useState(false);
   const [selectFilterFocus, setSelectFilterFocus] = useState(false);
-
 
   //-----Funciones botones
   const onFocus = () => {setInpSearcFocus(true)};
@@ -21,9 +28,14 @@ function NavBarHome(){
     };
   };
 
-  return <div>
-  <NavBar>
-    <div className="containerBtnFilters">
+  useEffect(() => {
+    
+  }, [])
+
+  return <NavBar>
+    <div className={`container${routerPage.includes('addgame')? ' center': ''}`}>
+      
+      <div className={`containerBtnFilters${routerPage.includes('home')? '': ' hidden'}`}>
       <div className="btnFilters">
         <label htmlFor="filter" onClick={onFocusFilter}>
           <span>Filter</span>
@@ -34,40 +46,56 @@ function NavBarHome(){
           {/* <input type="button" name='filter' className="iconFilter" onFocus={onFocusFilter} onBlur={onBlurFilter}>            
           </input> */}
       </div>      
-    </div>
+      </div>
+      <Link to='/home' className={`detailToHome${routerPage.includes('detailgame')? '': ' hidden'}`}>
+          <img src={detailToHome} alt="gif back" id="detailToHome" />
+      </Link>
+      
 
-    <div className="search-logout">
+      <div className={`search-logout`}>
 
-      <div className={`inpSearch${inpSearcFocus? ' onFocus':''}`}>
-        <label htmlFor="textSearch" className="glassSearch">
-          <img src={search} alt="Img-search" />
-        </label>        
-        <input type="text" name="textSearch" id="textSearch" placeholder="Write name of video game for search" onFocus={onFocus} onBlur={onBlur}/>
+        <div className={`inpSearch${inpSearcFocus? ' onFocus':''}${routerPage.includes('addgame')? ' hidden': ''}`}>
+          <label htmlFor="textSearch" className="glassSearch">
+            <img src={search} alt="Img-search" />
+          </label>        
+          <input type="text" name="textSearch" id="textSearch" placeholder="Write name of video game for search" onFocus={onFocus} onBlur={onBlur}/>
+        </div>
+        <button id="" name="BtnSearch" className={`${routerPage.includes('addgame')? ' hidden': ''}`}>Search</button>
+
+        <Link to='/addgame' className="addGame">
+          <label htmlFor="addGame" className="addGame">
+            <img src={agregar} alt="icon agregar" id="addGame" />
+          </label>
+          <input type="button" id="addGame" name="addGame" value="Add new game" />
+        </Link>
+
+        <div className="imgLogout">
+          <img src={logout} alt="" />
+        </div>
       </div>
 
-      <button id="" name="BtnSearch">Search</button>
-
-      <div className="imgLogout">
-        <img src={logout} alt="" />
-      </div>
-    </div>
+    </div>    
+    {selectFilterFocus? <FiltersNavBar className= 'fillter'></FiltersNavBar>:''}
   </NavBar>
-  {selectFilterFocus? <FiltersNavBar></FiltersNavBar>:''}
-  </div>
+  
 };
 
 const NavBar = styled.div`
-  width: 100%;
-  height: 100px;
-  border-bottom: 2px solid rgba(122, 147, 185, 0.9);
-  background-color: rgba(255, 255, 255, 0.2);
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0px;
-
-  .containerBtnFilters{
+  .container{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 80px;
+    border-bottom: 2px solid rgba(122, 147, 185, 0.9);
+    background-color: rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    
+    .containerBtnFilters{
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
@@ -129,18 +157,32 @@ const NavBar = styled.div`
         
       }
     }
-      }
-
-
-  .search-logout{
-    display: flex;
-    flex-wrap: nowrap;
-    height: 100%;
-    align-items: center;
-    .imgLogout{
+    }
+    .detailToHome{
       display: flex;
-      width: 85px;
-      height: 70px;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-items: center;
+      margin-left: 20px;
+      height: 100%;
+      width: 130px;
+      #detailToHome{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+      }
+    }
+    .search-logout{
+      display: flex;
+      flex-wrap: nowrap;
+      height: 100%;
+      width: max-content;
+      align-items: center;
+      gap: 20px;
+      .imgLogout{
+      display: flex;
+      width: 50px;
+      height: 50px;
       background-color: rgba(253, 253, 253, 0.5);
       border-radius: 50%;
       align-content: center;
@@ -155,8 +197,8 @@ const NavBar = styled.div`
         height: 80%;
         width: 80%;        
       }
-    }
-    button{
+      }
+      button{
       font-size: 16px;
       font-family: 'Roboto', sans-serif;      
       color: white;
@@ -170,8 +212,8 @@ const NavBar = styled.div`
         cursor: pointer;
         box-shadow: 0px 0px 3px 3px rgba(253, 253, 253, 0.4);
       }
-    }
-    .inpSearch{
+      }
+      .inpSearch{
       display: flex;
       flex-wrap: nowrap;
       width: 360px;
@@ -212,7 +254,7 @@ const NavBar = styled.div`
       &:hover{
         box-shadow: 0px 6px 3px 0px rgba(253, 253, 253, 0.6);
       }
-    }
+      }
       @keyframes parpadear {
         0% {
           box-shadow: 0px 6px 3px 0px rgba(253, 253, 253, 0.3);
@@ -241,13 +283,60 @@ const NavBar = styled.div`
         /* 0% {
           box-shadow: 0px 6px 3px 0px rgba(253, 253, 253, 0.0);
         } */
-      }    
+      }
+      .addGame{
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+        width: max-content;
+        height: 40px;
+        background-color: rgba(253, 253, 253, 0.6);
+        border-radius: 5px;
+        padding: 0px 3px 0px 3px ;
+        text-decoration: none;
+        label{
+          align-items: center;
+          width: 100%;
+          height: 100%;
+          background-color: transparent;
+          img{
+            width: 24px;
+            height: 24px;
+          }
+          &:hover{
+            cursor: pointer;
+          }
+        }
+        input{
+          background-color: transparent;
+          border: none;
+          font-size: 16px;
+          font-weight: bold;
+          &:hover{
+            cursor: pointer;
+          }
+        }
+                
+      }
+      .hidden{
+      display: none;
+    }
+         
     .onFocus{
       
       animation: parpadear 2s infinite;
       //box-shadow: 0px 6px 3px 0px rgba(253, 253, 253, 0.6);
     }
+    }
+    .hidden{
+      display: none;
+    }
   }
+  .center{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+  } 
   
 `;
 
