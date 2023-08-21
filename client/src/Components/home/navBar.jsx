@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import styled from 'styled-components';
 import logout from '../../assets/icons/logout48x48.png';
 import search from '../../assets/icons/search48x48.png';
@@ -8,18 +8,22 @@ import FiltersNavBar from './navBarFilters';
 import { useLocation, Link } from 'react-router-dom';
 import detailToHome from '../../assets/icons/gif/flechaIzquierda.gif'
 import agregar from '../../assets/icons/agregar.png'
+import { getVideogameByName, allVideogames } from "../../dataRd/actions";
 
 function NavBarHome({paht}){
   const location = useLocation();
   const routerPage = useSelector((state) => state.routerPage);
+  const dispatch = useDispatch();
 
   //const [routerPage, setRouterPage] = useState(paht);
   const [inpSearcFocus, setInpSearcFocus] = useState(false);
   const [selectFilterFocus, setSelectFilterFocus] = useState(false);
+  const [inpSearch, setInpSearch] = useState('');
 
   //-----Funciones botones
   const onFocus = () => {setInpSearcFocus(true)};
   const onBlur = () => {setInpSearcFocus(false)};
+  
   const onFocusFilter = () => {
     if(selectFilterFocus){
       setSelectFilterFocus(false)
@@ -27,6 +31,26 @@ function NavBarHome({paht}){
       setSelectFilterFocus(true)
     };
   };
+
+  const handleInptSearch = (e) => {
+    setInpSearch(e.target.value);
+    if(e.target.value === ''){
+      dispatch(allVideogames());
+    }
+  };
+
+  const inpSeacrhEnpty = (e) => {
+    const valueInp = e.target.value;
+    if(valueInp === ''){
+      dispatch(allVideogames());
+    }
+  };
+
+  const handleBtnSeacrh = () => {
+    if(inpSearch !== ''){
+      dispatch(getVideogameByName(inpSearch))
+    }    
+  }
 
   useEffect(() => {
     
@@ -37,6 +61,7 @@ function NavBarHome({paht}){
       
       <div className={`containerBtnFilters${routerPage.includes('home')? '': ' hidden'}`}>
       <div className="btnFilters">
+
         <label htmlFor="filter" onClick={onFocusFilter}>
           <span>Filter</span>
           <div className="imgFlecha">
@@ -58,9 +83,9 @@ function NavBarHome({paht}){
           <label htmlFor="textSearch" className="glassSearch">
             <img src={search} alt="Img-search" />
           </label>        
-          <input type="text" name="textSearch" id="textSearch" placeholder="Write name of video game for search" onFocus={onFocus} onBlur={onBlur}/>
+          <input type="text" name="textSearch" id="textSearch" placeholder="Write name of video game for search" value={inpSearch} onFocus={onFocus} onBlur={onBlur} onChange={handleInptSearch}/>
         </div>
-        <button id="" name="BtnSearch" className={`${routerPage.includes('addgame')? ' hidden': ''}`}>Search</button>
+        <button id="" name="BtnSearch" className={`${routerPage.includes('addgame')? ' hidden': ''}`} onClick={handleBtnSeacrh}>Search</button>
 
         <Link to='/addgame' className="addGame">
           <label htmlFor="addGame" className="addGame">

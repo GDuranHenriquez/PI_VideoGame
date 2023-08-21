@@ -67,7 +67,7 @@ function ContentDataDetail(){
         
       </div>
       <div className="screenshots">
-        {detailVideoGame.length === 0? '': detailVideoGame.screenshots_lis.map((srcImg, index) => (
+        {!detailVideoGame.screenshots_lis? '': detailVideoGame.screenshots_lis.map((srcImg, index) => (
           <div key={index} className="img">
             <img src={srcImg} alt="screenshots" />
           </div>

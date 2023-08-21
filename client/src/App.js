@@ -16,9 +16,6 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(()=>{
-    dispatch(allVideogames());
-    dispatch(getPlatForms());
-    dispatch(getGenres())
     dispatch(setRouter(location.pathname));
     dispatch(cleanDetail())
   },[]);

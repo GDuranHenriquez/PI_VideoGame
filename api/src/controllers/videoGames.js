@@ -73,6 +73,7 @@ async function getVideogames(req, res){
     const videoGames = [];
     for(var i = 0; i < pagesNumbers.length; i++){
       var { data } = await axios(`https://api.rawg.io/api/games?key=${API_KEY_RAW}&page=${pagesNumbers[i]}&page_size=${pagesZise}`);
+      
       data = data.results;
       data.forEach(game => {
           videoGames.push({
