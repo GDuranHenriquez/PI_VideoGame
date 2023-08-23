@@ -15,3 +15,4 @@ export const ERROR = 'ERROR';
 export const SET_FILTERS = 'SET_FILTERS';
 export const RESET_NO_DATA = 'RESET_NO_DATA';
 export const RESET_NEW_DATA = 'RESET_NEW_DATA';
+export const RESET_ERROR = 'RESET_ERROR';

@@ -1,4 +1,4 @@
-import { SEARCH_ALL_VIDEOGAME, SEARCH_ID_VIDEOGAME, SLICE_VIDEOGAME, PLATFORMS, CLEAN_DETAIL, ROUTER_PAGE, GENRES, POST_GAME, SEARCH_GAME_NAME, FILTERT_VIDEOGAME, RESET_NUMBER_PAGE, ERROR, SET_FILTERS, RESET_NO_DATA, RESET_NEW_DATA } from '../actions/types.js';
+import { SEARCH_ALL_VIDEOGAME, SEARCH_ID_VIDEOGAME, SLICE_VIDEOGAME, PLATFORMS, CLEAN_DETAIL, ROUTER_PAGE, GENRES, POST_GAME, SEARCH_GAME_NAME, FILTERT_VIDEOGAME, RESET_NUMBER_PAGE, ERROR, SET_FILTERS, RESET_NO_DATA, RESET_NEW_DATA, RESET_ERROR } from '../actions/types.js';
 
 const initialGlobalState = {
   allVideogames: null,
@@ -77,6 +77,8 @@ export default function rootReducer(state = initialGlobalState, action){
       return { ...state, noData: null}
     case RESET_NEW_DATA:
         return { ...state, newData: null}
+    case RESET_ERROR:
+      return { ...state, error: null}
     default:
       return {...state};
   }

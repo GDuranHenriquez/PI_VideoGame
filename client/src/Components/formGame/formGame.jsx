@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import swal from 'sweetalert';
-import { getPlatForms, postNewGame, resetNewdata } from "../../dataRd/actions/index.js";
+import { resetError, postNewGame, resetNewdata } from "../../dataRd/actions/index.js";
 
 
 function FormGame(){
@@ -15,6 +15,8 @@ function FormGame(){
   const genres = useSelector((state) => state.genres);
   const parentPlatforms = useSelector((state) => state.parentPlatforms)
   const newDataRedux = useSelector((state) => state.newData)
+  const error = useSelector((state) => state.error)
+
   
   //state
   const [dataState, setDataState] = useState({
@@ -26,6 +28,13 @@ function FormGame(){
     rating: 0,
     genres: [],
     platforms: []
+  });
+  const [formError, setFormError] = useState({
+    name: 1,
+    description: 1,
+    image: 1,
+    released: 1,
+    rating: 1,
   });
 
   const [checkGenState, setCheckGenState] = useState(
@@ -67,6 +76,20 @@ function FormGame(){
     }
   }, [newDataRedux])
 
+  useEffect(() => {
+    if(error){
+      swal({
+        title: "Error",
+        text: 'A game with this name already exists, please check and try again',
+        icon: "error",
+        buttons: false,
+      })
+      .then((value) => {
+        dispatch(resetError());          
+      }); 
+    }
+  }, [error])
+
   function handleSubmit(event){
     event.preventDefault();
     const genreArray = [];
@@ -89,23 +112,54 @@ function FormGame(){
       description: `<p>${dataState.description}</p>`,
       launchDate: dataState.released
     }
+    if(genreArray.length === 0){
+      return alert('You must choose at least one genre');
+    }else if(platfArray.length === 0){
+      return alert('you must choose at least one platform');
+    }
+    for(const key in formError) {
+      if (formError[key]) {
+        return alert('You must fill in all missing fields in red color');        
+      }
+    }
     dispatch(postNewGame(data));
+    setFormError({
+      name: 1,
+      description: 1,
+      image: 1,
+      launchDate: 1,
+      released: 1,
+      rating: 1,
+    })
   };
 
   const handleString = (e) => {
     if(e.target.name === 'description'){
       setDataState({...dataState, [e.target.name]: e.target.value});
+      if(e.target.value === ''){
+        setFormError({...formError, [e.target.name]:1})
+      }else{
+        setFormError({...formError, [e.target.name]:0})
+      }
     }else{
       setDataState({...dataState, [e.target.name]:e.target.value});
+      if(e.target.value === ''){
+        setFormError({...formError, [e.target.name]:1})
+      }else{
+        setFormError({...formError, [e.target.name]:0})
+      }
     }
   };
   const handleNumber = (e) => {
     const regex = /^\d{0,1}(\.\d{1,2})?$/;
+
     if(regex.test(e.target.value) || e.target.value === ''){
-      if(e.target.value === ''){
+      if(e.target.value === '' || e.target.value === 0){
         setDataState({...dataState, [e.target.name]:e.target.value});
-      }else if(e.target.value <= 5 && e.target.value >= 0){
+        setFormError({...formError, [e.target.name]:1})
+      }else if(e.target.value <= 5 && e.target.value > 0){
         setDataState({...dataState, [e.target.name]:Number.parseFloat(e.target.value)});
+        setFormError({...formError, [e.target.name]:0})
       }
     }
   }
@@ -134,27 +188,27 @@ function FormGame(){
 
         <div className="colectData">
           <h5>Insert videogame name</h5>
-          <input className="textInput" type="text" name="name" id="name" onChange={handleString} value={dataState.name}/>
+          <input className={`textInput${formError.name? ' error':''}`} type="text" name="name" id="name" onChange={handleString} value={dataState.name}/>
         </div>
 
         <div className="colectData">
           <h5>insert the url of the videogame image</h5>
-          <input className="textInput" type="text" name="image" id="url" onChange={handleString} value={dataState.image}/>
+          <input className={`textInput${formError.image? ' error':''}`} type="text" name="image" id="url" onChange={handleString} value={dataState.image}/>
         </div>
 
         <div className="colectData">
           <h5>Description</h5>
-          <textarea className="textareaInput" name="description" id="description" rows="4" onChange={handleString} value={dataState.description}></textarea>
+          <textarea className={`textareaInput${formError.description? ' error':''}`} name="description" id="description" rows="4" onChange={handleString} value={dataState.description}></textarea>
         </div>
 
         <div className="colectData">
-          <h5>Select the release date of the game</h5>
-          <input className="dateData" type="date" name="released" id="date" onChange={handleString} value={dataState.released}/>
+          <h5>Select the released date of the game</h5>
+          <input className={`dateData${formError.released? ' error':''}`} type="date" name="released" id="date" onChange={handleString} value={dataState.released}/>
         </div>
 
         <div className="colectData">
           <h5>Enter a number from 0 to 5 for the game rankin</h5>
-          <input className="numberData" type="number" name="rating" id="number" step='any' onChange={handleNumber} value={dataState.rating}/>
+          <input className={`numberData${formError.rating? ' error':''}`} type="number" name="rating" id="number" step='any' onChange={handleNumber} value={dataState.rating}/>
         </div>
 
         <div className="colectData check">
@@ -269,6 +323,9 @@ const DivFormGame = styled.div`
         background-color: rgba(62, 200, 224, 0.75);
         font-weight: bold;
         text-align: center;
+      }
+      .error{
+        border: 4px solid red;
       }      
     }
     .check{

@@ -1,4 +1,4 @@
-import { SEARCH_ALL_VIDEOGAME, SEARCH_ID_VIDEOGAME, SLICE_VIDEOGAME, PLATFORMS, CLEAN_DETAIL, ROUTER_PAGE, GENRES, POST_GAME, SEARCH_GAME_NAME, FILTERT_VIDEOGAME, RESET_NUMBER_PAGE, NO_DATA, ERROR, SET_FILTERS, RESET_NO_DATA, RESET_NEW_DATA } from './types.js';
+import { SEARCH_ALL_VIDEOGAME, SEARCH_ID_VIDEOGAME, SLICE_VIDEOGAME, PLATFORMS, CLEAN_DETAIL, ROUTER_PAGE, GENRES, POST_GAME, SEARCH_GAME_NAME, FILTERT_VIDEOGAME, RESET_NUMBER_PAGE, NO_DATA, ERROR, SET_FILTERS, RESET_NO_DATA, RESET_NEW_DATA,RESET_ERROR } from './types.js';
 import axios from 'axios';
 
 const ENDPOINT_VIDEOGAME  = process.env.REACT_APP_ENDPOINT_VIDEOGAME;
@@ -160,7 +160,7 @@ export const postNewGame = (data) =>{
       var err = error.response;
       return dispatch({
         type: ERROR,
-        payload: err.data.error
+        payload: err.data
       });
     });;
   };
@@ -193,3 +193,9 @@ export const resetNewdata = () => {
     payload: null}
 };
 
+export const resetError = () => {
+  return {
+    type: RESET_ERROR,
+    payload: null
+  }
+}
