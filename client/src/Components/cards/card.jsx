@@ -10,11 +10,6 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
-import { useSelector, useDispatch } from "react-redux";
-
-//import actions
-import { getVideoGameId } from '../../dataRd/actions/index.js'
-
 function CardVideogame({id, name, image, genres, platforms, released, rating, parent_platforms}){  
 
   return <Card to={`/detailgame/${id}`}>
@@ -133,7 +128,7 @@ const Card = styled(Link)`
     height: 250px;
     border-radius: 5px 5px 0px 0px;
     img{
-      object-fit: cover;
+      //object-fit: cover;
       width: 100%;
       height: 100%;
       border-radius: 5px 5px 0px 0px;

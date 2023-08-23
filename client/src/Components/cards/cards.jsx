@@ -3,17 +3,18 @@ import styled from "styled-components";
 import CardVideogame from "./card";
 import { useSelector, useDispatch } from "react-redux";
 import reanudarDerecha from '../../assets/icons/reanudarDerecha.png';
-import { getPageVideogames, getVideoGameId } from '../../dataRd/actions/index.js';
-import { useParams } from "react-router-dom";
+import { getPageVideogames, resetNoData } from '../../dataRd/actions/index.js';
+import swal from 'sweetalert';
 
 function CardsVideogame(){
   //variables
   const currentPage = useSelector((state) => state.currentPage);
   const numberPages = useSelector((state) => state.numberPages);
   const numberPage = useSelector((state) => state.numberPage);
+  const error = useSelector((state) => state.error);
+  const noData = useSelector((state) => state.noData);
   //dispatch
   const dispatch = useDispatch();
-  const { id } = useParams();
   //states
     const [numberPageCurrent, setNumberPage] = useState(numberPage);
   
@@ -30,10 +31,24 @@ function CardsVideogame(){
       
     }
   }
-
+  
   useEffect(()=>{
     dispatch(getPageVideogames(numberPageCurrent));
   }, [numberPageCurrent])
+
+  useEffect(() => {
+    if(noData){
+      swal({
+        title: `${noData.title}`,
+        text: `${noData.message}`,
+        icon: "warning",
+        buttons: false,
+      })
+      .then((value) => {
+        dispatch(resetNoData());
+      });
+    }
+  }, [noData])
 
   return <Cards>
     <div className="containerCards">
@@ -52,7 +67,7 @@ function CardsVideogame(){
         />
       )) }
     </div>
-    <div className="nextPrevius">
+    {numberPages > 0 && <div className="nextPrevius">
       <div className="left">
         <label htmlFor="left" onClick={changePage}>
           <img src={reanudarDerecha} name='left' alt="img previus" className={`previus${numberPageCurrent>1? '': ' hidden'}`} id="left"/>
@@ -66,7 +81,7 @@ function CardsVideogame(){
           <img src={reanudarDerecha} name='right' alt="img previus" className={`next${numberPageCurrent===numberPages? ' hidden': ''}`} id="right"/>
         </label>
       </div>
-    </div>    
+    </div>}    
   </Cards>
 }
 

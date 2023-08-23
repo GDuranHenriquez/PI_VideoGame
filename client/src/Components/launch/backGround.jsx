@@ -15,6 +15,9 @@ const BackgroundLaunchdiv = styled.div`
   width: 100vw;
   height: 100vh;
   z-index: -1;
+  img{
+    filter: brightness(40%);
+  }
 `
 
 

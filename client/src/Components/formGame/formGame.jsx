@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-
-import { getPlatForms, postNewGame } from "../../dataRd/actions/index.js";
+import swal from 'sweetalert';
+import { getPlatForms, postNewGame, resetNewdata } from "../../dataRd/actions/index.js";
 
 
 function FormGame(){
@@ -14,7 +14,7 @@ function FormGame(){
 
   const genres = useSelector((state) => state.genres);
   const parentPlatforms = useSelector((state) => state.parentPlatforms)
-
+  const newDataRedux = useSelector((state) => state.newData)
   
   //state
   const [dataState, setDataState] = useState({
@@ -33,13 +33,39 @@ function FormGame(){
   );
   const [checkplatState, setCheckPlatfState] = useState(
     new Array(parentPlatforms.length).fill(false)
-  );
+  ); 
   
-   
+  function resetForm(){
+    setDataState({
+      name: '',
+      description: '',
+      image: '',
+      launchDate: '',
+      released: '',
+      rating: 0,
+      genres: [],
+      platforms: []
+    })
+  }
 
-  useEffect(()=>{
-    
-  },[]);
+  useEffect(() => {
+    if(newDataRedux){
+      swal({
+        title: `${newDataRedux.title}`,
+        text: `${newDataRedux.message}`,
+        icon: "success",
+        buttons: false,
+      })
+      .then((value) => {
+        dispatch(resetNewdata());          
+      });
+      resetForm();
+      var updateChckStateGenre = new Array(genres.length).fill(false)
+      var updateChckStateplatf = new Array(parentPlatforms.length).fill(false)
+      setCheckGenState(updateChckStateGenre);
+      setCheckPlatfState(updateChckStateplatf); 
+    }
+  }, [newDataRedux])
 
   function handleSubmit(event){
     event.preventDefault();
@@ -134,40 +160,46 @@ function FormGame(){
         <div className="colectData check">
           <h5>Select the game genres</h5>
           <div className="checkBoxes">
-            {checkGenrres(genres, handleGenre)}
+            {checkGenrres(genres, handleGenre, checkGenState)}
           </div>
         </div>
 
         <div className="colectData check">
           <h5>Select on which platforms the game is available</h5>
           <div className="checkBoxes">
-            {checkPlatforms(parentPlatforms, handlePlatforms)}
+            {checkPlatforms(parentPlatforms, handlePlatforms, checkplatState)}
         </div>
         </div>
+
+        <input type="submit" className='inputSubmit' onSubmit={handleSubmit} value='Add Videogame'></input>
 
       </div>
 
       <div className="image">
         <h1>Image Preview</h1>
+        <div className="containerImg">
+          {dataState.image !== '' && <img src={dataState.image} alt="Screen Shot of your game" />}
+        </div>
+        
       </div>
 
-      <input type="submit" className='inputSubmit' onSubmit={handleSubmit} value='Add Videogame'></input>
+      
     </form>
   </DivFormGame>
 };
 
-const checkGenrres = (genres, handleGenre)=>{
+const checkGenrres = (genres, handleGenre, genState)=>{
   return genres.map((gen, index) =>(
    <div className="genCheck" key={index}>
-    <input type="checkbox" name={gen.name} id={`${gen.id}`} value={gen.name} onChange={handleGenre}/>{gen.name}
+    <input type="checkbox" name={gen.name} id={`${gen.id}`} value={gen.name} onChange={handleGenre} checked = {genState[gen.id-1]}/>{gen.name}
    </div>
   ))
 }
 
-const checkPlatforms = (platforms, handlePlatforms)=>{
+const checkPlatforms = (platforms, handlePlatforms, platf)=>{
   return platforms.map((platforms, index) =>(
    <div className="genCheck" key={index}>
-    <input type="checkbox" name={platforms.name} id={`${platforms.id}`} value={platforms.name} onChange={handlePlatforms}/>{platforms.name}
+    <input type="checkbox" name={platforms.name} id={`${platforms.id}`} value={platforms.name} onChange={handlePlatforms} checked = {platf[platforms.id-1]}/>{platforms.name}
    </div>
   ))
 }
@@ -175,7 +207,7 @@ const checkPlatforms = (platforms, handlePlatforms)=>{
 const DivFormGame = styled.div`
   padding-bottom: 20px;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
   width: 100%;
   height: max-content;
@@ -183,7 +215,7 @@ const DivFormGame = styled.div`
   background-color: rgba(0, 0, 0, 0.9);
   .formNewGame{
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
     width: 100%;
     height: max-content;
@@ -265,6 +297,21 @@ const DivFormGame = styled.div`
   }
   .image{
     width: 30%;
+    padding: 0px 20px 0px 10px;
+    .containerImg{
+      width: 100%;
+      height: 400px;
+      background-size: 100% 100%;
+      background-repeat:no-repeat;
+      background-size: cover;
+      img{       
+       width: 100%;
+       height: 100%;
+       border-radius: 5px;
+       
+     }
+    }
+    
   }
   .inputSubmit{
     width: 10%;

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import ReactPlayer from 'react-player'
 import plyVideo from '../../assets/icons/play.png'
-import { forEach } from "mathjs";
+
 
 function ContentDataDetail(){
     const detailVideoGame = useSelector((state) => state.detailVideoGame);
@@ -48,7 +48,7 @@ function ContentDataDetail(){
     return <DataDetailContainer>    
       <div className="imageDescript">
         <div className="image">
-          <img src={detailVideoGame.image} alt="https://media.rawg.io/media/games/021/021c4e21a1824d2526f925eff6324653.jpg"/>
+          <img src={detailVideoGame.image} alt={`'ScreenShot of ${detailVideoGame.name}'`}/>
         </div>
         <div className="description">
           <h1>{detailVideoGame.name}</h1>
@@ -58,7 +58,7 @@ function ContentDataDetail(){
             {!platForms(detailVideoGame.platforms)? '': <p>Platforms: {platForms(detailVideoGame.platforms)}</p>}
           </div>
           <div className="gen">
-            {!platForms(detailVideoGame.genres)? '': <p>Genres: {platForms(detailVideoGame.genres)}</p>}
+            {!genres(detailVideoGame.genres)? '': <p>Genres: {genres(detailVideoGame.genres)}</p>}
           </div>
           <div className="rating">
             {!detailVideoGame.rating? '': <p>Rating: {detailVideoGame.rating}</p>}

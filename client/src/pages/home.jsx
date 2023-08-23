@@ -29,8 +29,8 @@ function Home(){
 
   return <div className="home">
     <BackgroundHome></BackgroundHome>
-    {!(numberPages > 0) && <Loader/>}    
-    {(numberPages) && <CardsVideogame></CardsVideogame>}    
+    {(!(numberPages) && !(numberPages === 0) && !(numberPages > 0) ) && <Loader/>}    
+    {(numberPages > 0 || numberPages === 0) && <CardsVideogame></CardsVideogame>}    
   </div>
 };
 

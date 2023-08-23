@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from 'react-router-dom';
-import { Link } from "react-router-dom";
 import styled from "styled-components";
-
-import { allVideogames, getPlatForms, setRouter, cleanDetail } from "../dataRd/actions";
+import { setRouter, cleanDetail } from "../dataRd/actions";
 import BackgroundLaunch from "../Components/launch/backGround";
+import InterfaceBackGround from '../Components/launch/interfaceLaunh'
 
 function Launch(){
 
@@ -19,17 +18,15 @@ function Launch(){
     dispatch(cleanDetail())
   },[]);
 
-  return <LaunchDiv className="launch">
+  return <LaunchDiv>
     <BackgroundLaunch></BackgroundLaunch>
-    <Link to='/home' className="LinkHome">
-      <input type="button" value="GET START" />
-    </Link>
+    <InterfaceBackGround></InterfaceBackGround>
   </LaunchDiv>
 
 };
 
-const LaunchDiv = styled.div`
-  
+const LaunchDiv = styled.div` 
+    
 `
 
 

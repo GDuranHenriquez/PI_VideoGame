@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from 'styled-components';
 import logout from '../../assets/icons/logout48x48.png';
@@ -8,7 +8,7 @@ import FiltersNavBar from './navBarFilters';
 import { useLocation, Link } from 'react-router-dom';
 import detailToHome from '../../assets/icons/gif/flechaIzquierda.gif'
 import agregar from '../../assets/icons/agregar.png'
-import { getVideogameByName, allVideogames } from "../../dataRd/actions";
+import { getVideogameByName, allVideogames, resetNumberPage } from "../../dataRd/actions";
 
 function NavBarHome({paht}){
   const location = useLocation();
@@ -19,11 +19,12 @@ function NavBarHome({paht}){
   const [inpSearcFocus, setInpSearcFocus] = useState(false);
   const [selectFilterFocus, setSelectFilterFocus] = useState(false);
   const [inpSearch, setInpSearch] = useState('');
+  const divFiltersReference = useRef();
 
   //-----Funciones botones
   const onFocus = () => {setInpSearcFocus(true)};
   const onBlur = () => {setInpSearcFocus(false)};
-  
+
   const onFocusFilter = () => {
     if(selectFilterFocus){
       setSelectFilterFocus(false)
@@ -35,6 +36,9 @@ function NavBarHome({paht}){
   const handleInptSearch = (e) => {
     setInpSearch(e.target.value);
     if(e.target.value === ''){
+      setTimeout(() =>{
+        dispatch(resetNumberPage());
+      }, 1000)
       dispatch(allVideogames());
     }
   };
@@ -48,13 +52,24 @@ function NavBarHome({paht}){
 
   const handleBtnSeacrh = () => {
     if(inpSearch !== ''){
+      setTimeout(() =>{
+        dispatch(resetNumberPage());
+      }, 500)
       dispatch(getVideogameByName(inpSearch))
     }    
   }
+  const handleClickOutside = (event) => {
+    if (selectFilterFocus && divFiltersReference.current && !divFiltersReference.current.contains(event.target)) {
+      setSelectFilterFocus(false);
+    }
+  };
 
   useEffect(() => {
-    
-  }, [])
+    document.addEventListener('click', handleClickOutside)
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [selectFilterFocus]);
 
   return <NavBar>
     <div className={`container${routerPage.includes('addgame')? ' center': ''}`}>
@@ -72,9 +87,10 @@ function NavBarHome({paht}){
           </input> */}
       </div>      
       </div>
-      <Link to='/home' className={`detailToHome${routerPage.includes('detailgame')? '': ' hidden'}`}>
+      <Link to='/home' className={`detailToHome${routerPage.includes('addgame')? '': ' hidden'}`}>
           <img src={detailToHome} alt="gif back" id="detailToHome" />
       </Link>
+
       
 
       <div className={`search-logout`}>
@@ -99,8 +115,9 @@ function NavBarHome({paht}){
         </Link >
       </div>
 
-    </div>    
-    {selectFilterFocus? <FiltersNavBar className= 'fillter'></FiltersNavBar>:''}
+    </div>
+      
+    {selectFilterFocus? <div className="fillter" ref={divFiltersReference}><FiltersNavBar></FiltersNavBar></div> :''}
   </NavBar>
   
 };

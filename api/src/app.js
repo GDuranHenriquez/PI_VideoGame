@@ -10,6 +10,7 @@ const videogameRoutes = require('./routes/videoGamesRouter.js');
 const videogameNameRouter = require('./routes/videogameNameRouter.js')
 const platformsRouter = require('./routes/platformsRouter.js');
 const genresRouter = require('./routes/genresRoutes.js')
+const filtersRouters = require('./routes/filtersRoutes.js')
 
 require('./db.js');
 
@@ -17,8 +18,8 @@ const server = express();
 
 server.name = 'API';
 
-server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
-server.use(bodyParser.json({ limit: '50mb' }));
+server.use(bodyParser.urlencoded({ extended: true, limit: '100mb' }));
+server.use(bodyParser.json({ limit: '100mb' }));
 server.use(cookieParser());
 server.use(morgan('dev'));
 server.use((req, res, next) => {
@@ -34,6 +35,7 @@ server.use(cors());
 server.use("/videogames/name", videogameNameRouter);
 server.use('/videogames/platforms', platformsRouter);
 server.use('/videogames/genres',genresRouter);
+server.use('/videogames/filters', filtersRouters);
 server.use('/videogames', videogameRoutes);
 
 // Error catching endware.

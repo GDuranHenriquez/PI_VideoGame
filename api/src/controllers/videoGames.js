@@ -101,14 +101,42 @@ async function getVideogameid(req, res){
     const regex = /([a-zA-Z]+([0-9]+[a-zA-Z]+)+)/;  
     
     if(regex.test(id)){
-      const modelVideogame = await Videogame.findByPk( id,{
+      var modelVideogame = await Videogame.findByPk( id,{
         include: [
           {model: Genre, through: { attributes: [] }},
           {model: Platform, through: { attributes: [] }}
         ],
-        option: { raw: true }
-      });      
-      return res.status(200).json(modelVideogame)
+        options: { raw: true }
+      });
+      
+      //modelVideogame = JSON.parse(modelVideogame);
+      
+
+      const genres = [];
+      const platforms = [];
+
+      modelVideogame.platforms.forEach(pfrm =>{
+        platforms.push(pfrm.name)
+      });
+       modelVideogame.genres.forEach(gen => {
+        genres.push(gen.name)
+      });
+
+      
+
+      modelVideogame.genres = genres;
+      modelVideogame.platforms = platforms;
+      var data = {
+        id: modelVideogame.id,
+        name: modelVideogame.name,
+        description: modelVideogame.description,
+        image: modelVideogame.image,
+        released: modelVideogame.released,
+        rating: modelVideogame.rating,
+        genres: genres,
+        platforms: platforms
+      }
+      return res.status(200).json(data);
     }else{
       var { data } = await axios(`https://api.rawg.io/api/games/${id}?key=${API_KEY_RAW}`);
       var traylers = await axios(`https://api.rawg.io/api/games/${id}/movies?key=${API_KEY_RAW}`);
